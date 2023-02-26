@@ -1,0 +1,68 @@
+﻿https://twitter.com/i/status/1586358395933970433
+https://twitter.com/i/status/1586465821144289280            
+
+=====================
+MAP 
+Dimensions: 721px x 616px
+
+----------------------
+ODESSA->SEVESTAPOL
+----------------------
+	
+Start Point: [40,46]
+End Point: [542,534]
+
+Diff: [502,488]
+
+ -----> 217.7km horiz = 217700
+ |\
+ | \
+ |  \
+ |   \
+\|/   \_   300.5km odessa->sevastopol
+207.16km = 207160
+
+----------------------
+SEVASTOPOL->EXPLOSION
+----------------------
+
+Sevastopol Bay:
+44° 37' 18.31" N 33° 31' 58.87" E
+
+Opening diagonal: 460.15m   
+
+[193,323]= top point of entry
+
+to first big opening 1560m
+to first big opening horiz 1550
+to first big opening vert  239.92
+
+DIFF: [157,402]-[468,452]
+DIFF: [311,50] => [1550,239.92]
+
+Entry [110,309]
+
+=====================
+DRONE BOAT CHARACTERISTICS
+
+https://www.thesun.co.uk/wp-content/uploads/2022/09/TM-composite-Ukrainian-suicide-drone-boat-new-2.jpg
+
+speed 46 mph -> 74 km/h = 20.5 metres per second.
+range 60 miles = 96.5 km <<< not going to work, given that nowhere outside Crimea (Ukraine, but Russian stole in 2014)
+payload 145 lbs = 65.8 kg
+length 12 ft => 3.7m
+
+=====================
+ADMIRAL MAKAROV
+Length: 124.8M long about 828px
+Height: 26.6M tall about 177px
+
+Circle for ship: radius 172px @ 260, 338
+
+Photo was snipped via Snipping Tool, background removal using PowerPoint (remove background), manually corrected in MSPaint.
+
+=====================
+YOLO 
+
+https://blog.devmobile.co.nz/2022/01/27/ml-net-yolov5-camera-on-arm64-raspberry-pi/
+https://towardsdatascience.com/how-to-train-a-custom-object-detection-model-with-yolo-v5-917e9ce13208
