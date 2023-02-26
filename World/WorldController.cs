@@ -27,7 +27,7 @@ namespace SinkingFeelingPOC.World
         /// true - it skips the waypoints, and starts at Sevastopol.
         /// false - it navigates via the way-points. (default)
         /// </summary>
-        private const bool c_testingAI = true; // default: (false)
+        private const bool c_testingAI = false; // default: (false)
 
         /// <summary>
         /// true - the ship is at a specific location, enabling easier debugging.
@@ -39,13 +39,13 @@ namespace SinkingFeelingPOC.World
         /// true - Draws a a line pointing to target, and a perpendicular.
         /// false - no annotation drawn.
         /// </summary>
-        private const bool c_showAdditionalDebugAnnotations = true; // default: (false)
+        private const bool c_showAdditionalDebugAnnotations = false; // default: (false)
 
         /// <summary>
         /// true - it draws the search triangle and target ship (Makarov).
         /// false - it draws neither. (default) 
         /// </summary>
-        private bool showDroneBoatSearchPath = true; // default: (false)
+        private bool showDroneBoatSearchPath = false; // default: (false)
 
         /// <summary>
         /// A windows timer firsts, to provide animation frames.
