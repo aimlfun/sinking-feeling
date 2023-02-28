@@ -143,10 +143,10 @@ namespace SinkingFeeling.Utils
             int offset = y * offsetDisplay + x * bytesPerPixelDisplay;
 
             return Color.FromArgb(
-                Pixels[offset],
+                Pixels[offset + 3],
+                Pixels[offset + 0],
                 Pixels[offset + 1],
-                Pixels[offset + 2],
-                Pixels[offset + 3]);
+                Pixels[offset + 2]);
         }
 
         /// <summary>
@@ -159,10 +159,10 @@ namespace SinkingFeeling.Utils
         {
             int offset = y * offsetDisplay + x * bytesPerPixelDisplay;
 
-            Pixels[offset] = color.A;
-            Pixels[offset + 1] = color.R;
-            Pixels[offset + 2] = color.G;
-            Pixels[offset + 3] = color.B;
+            Pixels[offset] = color.R;
+            Pixels[offset + 1] = color.G;
+            Pixels[offset + 2] = color.B;
+            Pixels[offset + 3] = color.A;
         }
     }
 }
