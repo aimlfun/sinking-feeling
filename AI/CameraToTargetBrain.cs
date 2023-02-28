@@ -45,7 +45,7 @@ namespace SinkingFeeling.AI
             neuralNetworkMappingPixelsToCentreOfShip = new(new int[] { Camera.CameraWidthPX * 80, 5, 1 });
 
             // load rather than compute.
-            if (1 == 0 && neuralNetworkMappingPixelsToCentreOfShip.Load(c_AIFilePath))
+            if (neuralNetworkMappingPixelsToCentreOfShip.Load(c_AIFilePath))
             {
                 worldController.Telemetry(">> LOADED AI MODEL");
                 return;
@@ -128,6 +128,8 @@ namespace SinkingFeeling.AI
         /// <returns></returns>
         private static List<TrainingDataItemImageToTarget> CreateTrainingData()
         {
+            bool c_verifyBackgroundIsTransparent = false; // set to true, the sky should be green, and the boat white/black.
+
             Debug.WriteLine("CREATING TRAINING DATA");
 
             List<TrainingDataItemImageToTarget> trainingData = new();
@@ -140,14 +142,14 @@ namespace SinkingFeeling.AI
                     Bitmap boatImage = new(Camera.CameraWidthPX, 80);
 
                     using Graphics graphics = Graphics.FromImage(boatImage);
-                    graphics.Clear(Color.Black);
+                    graphics.Clear(c_verifyBackgroundIsTransparent ? Color.DarkGreen : Color.Black);
 
                     ShipRenderer.EdgesOfRealisticRenderer(graphics, xCentreOfBoat, sizeOfBoat);
 
                     // uncomment this if you wish to see the images
                     // boatImage.Save($@"c:\temp\sink\images\boat_{sizeOfBoat}_{xCentreOfBoat}.png",ImageFormat.Png);
 
-                    trainingData.Add(new(CameraPixelsToDoubleArray(boatImage), xCentreOfBoat, (int)sizeOfBoat));
+                    trainingData.Add(new(CameraPixelsToDoubleArray(boatImage, $@"c:\temp\sink\images2\boat_{sizeOfBoat}_{xCentreOfBoat}.png"), xCentreOfBoat, (int)sizeOfBoat));
                 }
             }
 
@@ -167,6 +169,8 @@ namespace SinkingFeeling.AI
 
             bool trained;
 
+            int accuracy = 10;
+
             do
             {
                 ++epoch;
@@ -174,29 +178,39 @@ namespace SinkingFeeling.AI
                 // push ALL the training images through back propagation
                 foreach (TrainingDataItemImageToTarget trainingDataItem in trainingData)
                 {
-                    neuralNetworkMappingPixelsToCentreOfShip.BackPropagate(trainingDataItem.pixelsInAIinputForm, new double[] { trainingDataItem.X / Camera.CameraWidthPX });
+                    neuralNetworkMappingPixelsToCentreOfShip.BackPropagate(trainingDataItem.pixelsInAIinputForm, new double[] { trainingDataItem.X / (float)Camera.CameraWidthPX });
                 }
 
                 trained = true;
-          
+
+                int checkedPoints = 0;
+
                 // check every image returns an accurate enough response (within 5 pixels for large, 2 for small)
                 foreach (TrainingDataItemImageToTarget trainingDataItem in trainingData)
                 {
+                    checkedPoints++;
                     double aiTargetPosition = AIMapCameraImageIntoTargetX(trainingDataItem.pixelsInAIinputForm);
 
                     double deviationXofAItoExpected = Math.Abs(aiTargetPosition - trainingDataItem.X);
 
-                    if (deviationXofAItoExpected > (trainingDataItem.Size < 40 ? 2 : 5))
+                    if (deviationXofAItoExpected > (trainingDataItem.Size < 40 ? 3 : accuracy))
                     {
                         trained = false;
                         break;
                     }
                 }
 
-                worldController.Telemetry($">> EPOCH {epoch}");
+                worldController.Telemetry($">> EPOCH {epoch} @ {checkedPoints}/{trainingData.Count}");
                 Application.DoEvents();
 
-                Debug.WriteLine(epoch);
+                // train for more accuracy each time it is trained
+                if (trained && accuracy > 2)
+                {
+                    Debug.WriteLine($">> TRAINED for {accuracy}px accuracy");
+                    accuracy--;
+                    trained = false;
+                }
+
             } while (!trained);
 
             Debug.WriteLine($"TRAINING COMPLETE. EPOCH {epoch}");
@@ -219,7 +233,7 @@ namespace SinkingFeeling.AI
         /// Pixels are deemed "white" or not "white".
         /// </summary>
         /// <returns>pixels as array of 1/0.</returns>
-        internal static double[] CameraPixelsToDoubleArray(Bitmap frameImage)
+        internal static double[] CameraPixelsToDoubleArray(Bitmap frameImage, string? filename)
         {
             ByteAccessibleBitmap accessibleBitmap = new(frameImage);
 
@@ -236,12 +250,16 @@ namespace SinkingFeeling.AI
                 for (int y = 0; y < height; y++)
                 {
                     // white is red+green+blue, we only need one of them to detect presence of pixel
-                    if (accessibleBitmap.GetRedChannelPixel(x, y) != 0)
+                    //if (accessibleBitmap.GetRedChannelPixel(x, y) != 0)
+                    if (accessibleBitmap.GetRedChannelPixel(x, y) > 30)
                     {
                         vertPixels[y * 200 + x] = 1; // 1 = white pixel
 
                         ++whitePixelCount;
+                        accessibleBitmap.SetARGBPixel(x, y, Color.White);
                     }
+                    else
+                        accessibleBitmap.SetARGBPixel(x, y, Color.Black);
                 }
             }
 
@@ -249,6 +267,15 @@ namespace SinkingFeeling.AI
             {
                 //Debugger.Break(); // this can happen under normal circumstances, but useful for debug
             }
+
+            /* uncomment this if you wish to see the images that go into the AI
+
+            if (filename != null)
+            {
+                Bitmap b = accessibleBitmap.UpdateBitmap();
+                b.Save(filename, ImageFormat.Png);
+            }
+            */
 
             return vertPixels;
         }
