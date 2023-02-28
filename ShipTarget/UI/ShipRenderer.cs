@@ -97,7 +97,7 @@ namespace SinkingFeelingPOC.ShipTarget.UI
             // the image is full size, so shrink it to the required size
             ImageUtils.ResizeImage(ref bitmapOfShipInGreyScale, (int)size, (int)heightScaledToSize);
             bitmapOfShipInGreyScale.MakeTransparent(Color.White);
-
+            
             graphics.DrawImageUnscaled(bitmapOfShipInGreyScale, (int)Math.Round(xCentreOfBoat - size / 2), 80 - bitmapOfShipInGreyScale.Height);
             graphics.Flush();
 
@@ -123,10 +123,10 @@ namespace SinkingFeelingPOC.ShipTarget.UI
 
             // the image is full size, so shrink it to the required size
             ImageUtils.ResizeImage(ref bitmapOfShipInGreyScale, (int)size, (int)height);
-            bitmapOfShipInGreyScale.MakeTransparent(Color.White);
+            bitmapOfShipInGreyScale.MakeTransparent();
 
             ImageUtils.LoadCurrentBitmap(bitmapOfShipInGreyScale);
-            ImageUtils.ConvertBitmapToGreyScale();
+            //ImageUtils.ConvertBitmapToGreyScale();
 
             // this applies "edge" filter
             bitmapOfShipInGreyScale = ImageUtils.ApplyRobertsFilter();
