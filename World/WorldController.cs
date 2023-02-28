@@ -20,7 +20,7 @@ namespace SinkingFeelingPOC.World
         /// <summary>
         /// A large font for the drone cam.
         /// </summary>
-        private static Font s_cameMessagefont = new ("Segoe", 18);
+        private static readonly Font s_cameMessagefont = new ("Segoe", 18);
 
         #region PRIVATE ATTRIBUTES
         /// <summary>
