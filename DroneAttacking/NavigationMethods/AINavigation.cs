@@ -57,7 +57,7 @@ namespace SinkingFeelingPOC.DroneAttacking.NavigationMethods
 
             if (droneBrainIsAttachedTo.worldController.IsUnderManualControl) return;
 
-            locationCentreOfTargetWithRespectToCamera = (int)Math.Round(brain.AIMapCameraImageIntoTargetX(CameraToTargetBrain.CameraPixelsToDoubleArray(ReturnBitmapFilteredToEdgesOnly(cameraOutput))));
+            locationCentreOfTargetWithRespectToCamera = (int)Math.Round(brain.AIMapCameraImageIntoTargetX(CameraToTargetBrain.CameraPixelsToDoubleArray(ReturnBitmapFilteredToEdgesOnly(cameraOutput), null)));
             
             cameraOutput.Save(@"c:\temp\camera-output.png");
 
